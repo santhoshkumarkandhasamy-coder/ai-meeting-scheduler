@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: meeting
+      POSTGRES_PASSWORD: meeting
+      POSTGRES_DB: meeting
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://meeting:meeting@db:5432/meeting
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
